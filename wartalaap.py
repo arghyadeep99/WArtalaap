@@ -18,7 +18,7 @@ from wordcloud import WordCloud, STOPWORDS, ImageColorGenerator
 
 st.title('WArtalaap: Analyze your WhatsApp Chats')
 st.markdown('Analyze your personal chats or group chats with WArtalaap!')
-logo = Image.open("./logo.jpg")
+logo = Image.open("./image.jpg")
 st.sidebar.title("WArtalaap")
 st.sidebar.image(logo, use_column_width=True)
 st.sidebar.markdown("This app analyzes your WhatsApp Chats")
