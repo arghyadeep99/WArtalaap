@@ -18,7 +18,7 @@ from wordcloud import WordCloud, STOPWORDS, ImageColorGenerator
 
 st.title('WArtalaap: Analyze your WhatsApp Chats')
 st.markdown('Analyze your personal chats or group chats with WArtalaap!')
-logo = Image.open("./image.jpg")
+logo = Image.open("./logo.jpg")
 st.sidebar.title("WArtalaap")
 st.sidebar.image(logo, use_column_width=True)
 st.sidebar.markdown("This app analyzes your WhatsApp Chats")
@@ -81,11 +81,22 @@ def daily_freq_plot(data):
 	fig.update_xaxes(nticks=20)
 	return fig
 
+
 def most_active_days(data):
+	
 	data['Date'].value_counts().head(10).plot.barh()
 	plt.xlabel('Number of Messages')
 	plt.ylabel('Date')
 	plt.tight_layout()
+	'''
+	temp = pd.DataFrame(['Date','Count'])
+	temp['Date'] = data['Date'].value_counts().head(10).index
+	temp['Count'] = data['Date'].value_counts().head(10)
+	fig = px.bar(temp, x='Count', y='Date', text='Count')
+	fig.update_traces(texttemplate='%{text:.2s}', textposition='outside')
+	fig.update_layout(uniformtext_minsize=8, uniformtext_mode='hide')
+	fig.show()
+	'''
 
 def most_active_time(data):
 	data['Time'].value_counts().head(10).plot.barh()
@@ -362,7 +373,7 @@ if uploaded_file is not None:
 		st.markdown(media_messages_df.shape[0])
 		st.subheader("**%s's total emojis **"% name)
 		st.markdown(emojis)
-		st.subheader("**%s's total links**"% name)
+		st.subheader("**%s's total links 🔗**"% name)
 		st.markdown(links)
 		messages_df = df.drop(media_messages_df.index)
 		messages_df = messages_df.drop(deleted_messages.index)
@@ -371,6 +382,8 @@ if uploaded_file is not None:
 		messages_df['Word_Count'] = messages_df['Message'].apply(lambda s : len(re.findall(r'\w+', s)))
 		messages_df["MessageCount"]=1
 		messages_df["emojicount"]= messages_df['emoji'].str.len()
+		st.subheader(f"**Average number of words per message 🔤**")
+		st.markdown((np.sum(messages_df['Word_Count']))/messages_df.shape[0])
 		config={'responsive': True}
 		st.header("**Some more Stats**")
 		st.subheader("**%s's emoji distribution**"% name)
